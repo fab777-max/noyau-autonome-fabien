@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 
 const source = await readFile("index.js");
 const actualHash = createHash("sha256").update(source).digest("hex");
-const expectedHash = "2e3d28cad84344654dd06661bea1c143ee151751b2d8e7da673ef60c23a5c832";
+const expectedHash = "6c1b9bf6b6e88f6efe88e96890bac148df558943a9ac63a7c587d2bcefe5bfb5";
 
 if (actualHash !== expectedHash) {
   throw new Error(`index.js integrity check failed: ${actualHash}`);
