@@ -191,6 +191,99 @@ function tokenMatches(request, expected) {
   return getBearer(request) === expected;
 }
 
+const GITHUB_OIDC_ISSUER = "https://token.actions.githubusercontent.com";
+const GITHUB_OIDC_AUDIENCE = "noyau-autonome-live";
+const GITHUB_OIDC_REPOSITORY = "fab777-max/noyau-autonome-live";
+const GITHUB_OIDC_REF = "refs/heads/main";
+const GITHUB_OIDC_WORKFLOW_REF = `${GITHUB_OIDC_REPOSITORY}/.github/workflows/sync-live.yml@${GITHUB_OIDC_REF}`;
+let githubJwksCache = { expiresAt: 0, keys: [] };
+
+function base64UrlToBytes(value) {
+  const normalized = String(value || "").replace(/-/g, "+").replace(/_/g, "/");
+  const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+  const binary = atob(padded);
+  return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+}
+
+function decodeJwtJson(value) {
+  return JSON.parse(new TextDecoder().decode(base64UrlToBytes(value)));
+}
+
+async function getGitHubOidcJwks() {
+  const now = Date.now();
+  if (githubJwksCache.expiresAt > now && githubJwksCache.keys.length) return githubJwksCache.keys;
+
+  const response = await fetch(`${GITHUB_OIDC_ISSUER}/.well-known/jwks`, {
+    headers: { accept: "application/json" },
+  });
+  if (!response.ok) throw new Error(`github_oidc_jwks_failed_${response.status}`);
+
+  const body = await response.json();
+  const keys = Array.isArray(body?.keys) ? body.keys : [];
+  if (!keys.length) throw new Error("github_oidc_jwks_empty");
+
+  githubJwksCache = { expiresAt: now + 10 * 60 * 1000, keys };
+  return keys;
+}
+
+function githubOidcAudienceMatches(audience) {
+  if (Array.isArray(audience)) return audience.includes(GITHUB_OIDC_AUDIENCE);
+  return audience === GITHUB_OIDC_AUDIENCE;
+}
+
+async function verifyGitHubActionsOidcToken(token) {
+  try {
+    const parts = String(token || "").split(".");
+    if (parts.length !== 3) return false;
+
+    const [encodedHeader, encodedPayload, encodedSignature] = parts;
+    const header = decodeJwtJson(encodedHeader);
+    const claims = decodeJwtJson(encodedPayload);
+
+    if (header?.alg !== "RS256" || typeof header?.kid !== "string") return false;
+
+    const jwks = await getGitHubOidcJwks();
+    const jwk = jwks.find((candidate) => candidate?.kid === header.kid && candidate?.kty === "RSA");
+    if (!jwk) return false;
+
+    const key = await crypto.subtle.importKey(
+      "jwk",
+      jwk,
+      { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+      false,
+      ["verify"],
+    );
+    const validSignature = await crypto.subtle.verify(
+      { name: "RSASSA-PKCS1-v1_5" },
+      key,
+      base64UrlToBytes(encodedSignature),
+      new TextEncoder().encode(`${encodedHeader}.${encodedPayload}`),
+    );
+    if (!validSignature) return false;
+
+    const now = Math.floor(Date.now() / 1000);
+    if (claims?.iss !== GITHUB_OIDC_ISSUER) return false;
+    if (!githubOidcAudienceMatches(claims?.aud)) return false;
+    if (!Number.isFinite(claims?.exp) || claims.exp < now - 30) return false;
+    if (Number.isFinite(claims?.nbf) && claims.nbf > now + 30) return false;
+    if (claims?.repository !== GITHUB_OIDC_REPOSITORY) return false;
+    if (claims?.repository_owner !== "fab777-max") return false;
+    if (claims?.ref !== GITHUB_OIDC_REF) return false;
+    if (claims?.workflow_ref !== GITHUB_OIDC_WORKFLOW_REF) return false;
+    if (claims?.sub !== `repo:${GITHUB_OIDC_REPOSITORY}:ref:${GITHUB_OIDC_REF}`) return false;
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function githubActionsOidcMatches(request) {
+  const token = getBearer(request);
+  if (!token) return false;
+  return verifyGitHubActionsOidcToken(token);
+}
+
 function authFailure() {
   return errorJson("unauthorized", 401, undefined, {
     "www-authenticate": 'Bearer realm="noyau-autonome-bridge"',
@@ -410,6 +503,16 @@ async function handleReadEndpoint(request, env, kind) {
   return errorJson("not_found", 404);
 }
 
+async function handleGitHubLiveRead(request, env) {
+  if (!(await githubActionsOidcMatches(request))) return authFailure();
+  const stored = await readStoredSnapshot(env, null);
+  return json(
+    { ...stored.snapshot, server: { storedAt: stored.storedAt } },
+    200,
+    cacheHeaders(stored),
+  );
+}
+
 function mcpText(data) {
   return { content: [{ type: "text", text: JSON.stringify(data) }] };
 }
@@ -514,6 +617,8 @@ async function workerFetch(request, env, ctx) {
       response = await handleReadEndpoint(request, env, "status");
     } else if (url.pathname === "/api/bridge/v1/snapshot/latest" && request.method === "GET") {
       response = await handleReadEndpoint(request, env, "snapshot");
+    } else if (url.pathname === "/api/bridge/v1/github/live" && request.method === "GET") {
+      response = await handleGitHubLiveRead(request, env);
     } else if (url.pathname === "/api/bridge/v1/skills" && request.method === "GET") {
       response = await handleReadEndpoint(request, env, "skills");
     } else if (url.pathname === "/api/bridge/v1/meta2" && request.method === "GET") {
