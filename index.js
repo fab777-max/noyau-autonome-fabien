@@ -290,14 +290,6 @@ async function authorizePairCapability(env, capability) {
   return response.json();
 }
 
-async function consumePairCapability(env, pairId) {
-  const stub = storeStub(env, pairingStoreName(pairId));
-  await stub.fetch("https://bridge.internal/pair/consume", {
-    method: "POST",
-    headers: JSON_HEADERS,
-  });
-}
-
 async function authenticateSnapshotWrite(request, env) {
   const bearer = getBearer(request);
   if (!bearer) return null;
@@ -313,7 +305,7 @@ function pairingPage(pairId) {
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer"><title>Pairage Noyau Autonome</title>
 <style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f1012;color:#f7f7f8;margin:0;padding:28px 18px}main{max-width:560px;margin:auto}.card{background:#191a1e;border:1px solid #34363d;border-radius:22px;padding:20px}.ok{color:#6dd6a0}.muted{color:#a8abb3;line-height:1.45}button{width:100%;min-height:58px;border:0;border-radius:16px;background:#69a5ff;color:#07101d;font-size:17px;font-weight:850;margin-top:16px}button:disabled{opacity:.55}.status{margin-top:14px;font-size:14px;line-height:1.45}</style>
-</head><body><main><div class="card"><h1>Pairer le Noyau</h1><p class="muted">Cette page délivre une capability d’écriture temporaire, valable quelques minutes et pour un seul snapshot. Elle n’est jamais enregistrée dans GitHub ni dans le Noyau.</p><button id="go">COPIER LA CAPABILITY & OUVRIR LE NOYAU</button><div class="status" id="status">Prêt.</div></div></main>
+</head><body><main><div class="card"><h1>Pairer le Noyau</h1><p class="muted">Cette page délivre une capability d’écriture temporaire, valable quelques minutes et uniquement pour le cerveau attendu. Elle n’est jamais enregistrée dans GitHub ni dans le Noyau.</p><button id="go">COPIER LA CAPABILITY & OUVRIR LE NOYAU</button><div class="status" id="status">Prêt.</div></div></main>
 <script>
 const pairId=${safePairId}; const appUrl=${appUrl};
 const button=document.getElementById("go"), status=document.getElementById("status");
@@ -646,7 +638,6 @@ async function handleSnapshotPost(request, env) {
   const { response, body } = await putSnapshot(env, snapshot);
   if (response.ok) {
     await setLastBrainId(env, snapshot.brain.brainId);
-    if (writeAuth.kind === "pair") await consumePairCapability(env, writeAuth.pairId);
   }
   logSnapshotResult(snapshot, bytes.byteLength, body.status || response.status);
   return json(body, response.status, { "cache-control": "no-store" });
