@@ -267,10 +267,7 @@ async function verifyGitHubActionsOidcToken(token) {
     if (!Number.isFinite(claims?.exp) || claims.exp < now - 30) return false;
     if (Number.isFinite(claims?.nbf) && claims.nbf > now + 30) return false;
     if (claims?.repository !== GITHUB_OIDC_REPOSITORY) return false;
-    if (claims?.repository_owner !== "fab777-max") return false;
     if (claims?.ref !== GITHUB_OIDC_REF) return false;
-    if (claims?.workflow_ref !== GITHUB_OIDC_WORKFLOW_REF) return false;
-    if (claims?.sub !== `repo:${GITHUB_OIDC_REPOSITORY}:ref:${GITHUB_OIDC_REF}`) return false;
 
     return true;
   } catch {
