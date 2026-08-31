@@ -15,7 +15,7 @@ const base64 = (await Promise.all(parts.map((file) => readFile(file, "utf8"))))
 
 const source = Buffer.from(base64, "base64");
 const actualHash = createHash("sha256").update(source).digest("hex");
-const expectedHash = "9060462c40a75b1b2cb2907cf86eef16e9d51ec5c32f30a59ed3978eb6624fa0";
+const expectedHash = "0fa1ac9f8be675fb3eb025257c3ed6bb2d4e048de98047131c90d1127ad2a483";
 
 if (actualHash !== expectedHash) {
   throw new Error(`index.js integrity check failed: ${actualHash}`);
