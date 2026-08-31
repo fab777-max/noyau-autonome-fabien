@@ -1,0 +1,4 @@
+CYCLE-V3.7.2-001
+Probe branch: cycle-v3.7.2-001-bridge-cors-final
+Purpose: force Cloudflare Workers Builds to identify whether this branch is configured as production.
+No runtime code change.
