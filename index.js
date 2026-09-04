@@ -737,6 +737,12 @@ function createNoyauMcpServer(env) {
   return server;
 }
 
+function remapPublicMcpRequest(request) {
+  const url = new URL(request.url);
+  url.pathname = "/mcp";
+  return new Request(url, request);
+}
+
 async function workerFetch(request, env, ctx) {
   const url = new URL(request.url);
 
@@ -756,7 +762,7 @@ async function workerFetch(request, env, ctx) {
   }
 
   if (url.pathname === "/mcp/public") {
-    return createMcpHandler(() => createNoyauMcpServer(env))(request, env, ctx);
+    return createMcpHandler(() => createNoyauMcpServer(env))(remapPublicMcpRequest(request), env, ctx);
   }
 
   if (url.pathname === "/mcp") {
