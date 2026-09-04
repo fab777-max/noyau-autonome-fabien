@@ -755,6 +755,10 @@ async function workerFetch(request, env, ctx) {
     }), request, env);
   }
 
+  if (url.pathname === "/mcp/public") {
+    return createMcpHandler(() => createNoyauMcpServer(env))(request, env, ctx);
+  }
+
   if (url.pathname === "/mcp") {
     if (!tokenMatches(request, env.BRIDGE_READ_TOKEN)) return authFailure();
     return createMcpHandler(() => createNoyauMcpServer(env))(request, env, ctx);

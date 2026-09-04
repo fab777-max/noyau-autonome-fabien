@@ -14,6 +14,8 @@ const checks = [
   ["pair page uses no-store", source.includes('"cache-control": "no-store"')],
   ["pair link response omits capability", /pairUrl:[\s\S]{0,220}expiresAt/.test(source) && !/pairUrl:[\s\S]{0,220}capability/.test(source)],
   ["MCP remains read-token protected", /url\.pathname === "\/mcp"[\s\S]{0,180}BRIDGE_READ_TOKEN/.test(source)],
+  ["public MCP route is declared before protected MCP route", source.indexOf('url.pathname === "/mcp/public"') < source.indexOf('url.pathname === "/mcp"')],
+  ["public MCP route exposes read-only server without token check", /url\.pathname === "\/mcp\/public"[\s\S]{0,180}createNoyauMcpServer/.test(source)],
 ];
 
 let failures = 0;
