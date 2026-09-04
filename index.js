@@ -191,6 +191,156 @@ function tokenMatches(request, expected) {
   return getBearer(request) === expected;
 }
 
+const PAIR_SCHEMA = "noyau-bridge-pair-v1";
+const PAIR_TTL_MS = 10 * 60 * 1000;
+const PAIR_APP_URL = "https://noyau-autonome-v37.fabien98escoffier.chatgpt.site";
+
+function randomBase64Url(byteLength = 24) {
+  const bytes = new Uint8Array(byteLength);
+  crypto.getRandomValues(bytes);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+function pairingStoreName(pairId) {
+  return `pair:${pairId}`;
+}
+
+function parsePairCapability(value) {
+  const match = /^np1\.([A-Za-z0-9_-]{12,80})\.([A-Za-z0-9_-]{20,160})$/.exec(String(value || ""));
+  return match ? { pairId: match[1], secret: match[2] } : null;
+}
+
+async function createPairingSession(request, env) {
+  if (!(await githubActionsOidcMatches(request))) return authFailure();
+
+  let body = {};
+  try {
+    body = await request.json();
+  } catch {}
+
+  const expectedBrainId = String(body?.expectedBrainId || "").trim();
+  const expectedGeneration = Number(body?.expectedGeneration);
+  if (!/^brain_[A-Za-z0-9]{4,64}$/.test(expectedBrainId)) return errorJson("invalid_expected_brain_id", 400);
+  if (!Number.isInteger(expectedGeneration) || expectedGeneration < 1) return errorJson("invalid_expected_generation", 400);
+
+  const pairId = randomBase64Url(18);
+  const secret = randomBase64Url(32);
+  const capability = `np1.${pairId}.${secret}`;
+  const now = Date.now();
+  const record = {
+    schema: PAIR_SCHEMA,
+    pairId,
+    capability,
+    expectedBrainId,
+    expectedGeneration,
+    createdAt: new Date(now).toISOString(),
+    expiresAt: new Date(now + PAIR_TTL_MS).toISOString(),
+    redeemedAt: null,
+    consumedAt: null,
+  };
+
+  const stub = storeStub(env, pairingStoreName(pairId));
+  const stored = await stub.fetch("https://bridge.internal/pair", {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify(record),
+  });
+  if (!stored.ok) return errorJson("pair_store_failed", 500);
+
+  const origin = new URL(request.url).origin;
+  return json({
+    status: "created",
+    schema: PAIR_SCHEMA,
+    pairId,
+    pairUrl: `${origin}/pair/${encodeURIComponent(pairId)}`,
+    expiresAt: record.expiresAt,
+    expectedBrainId,
+    expectedGeneration,
+  }, 201, { "cache-control": "no-store" });
+}
+
+async function redeemPairingSession(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return errorJson("invalid_json", 400);
+  }
+  const pairId = String(body?.pairId || "");
+  if (!/^[A-Za-z0-9_-]{12,80}$/.test(pairId)) return errorJson("invalid_pair_id", 400);
+  const stub = storeStub(env, pairingStoreName(pairId));
+  return stub.fetch("https://bridge.internal/pair/redeem", {
+    method: "POST",
+    headers: JSON_HEADERS,
+  });
+}
+
+async function authorizePairCapability(env, capability) {
+  const parsed = parsePairCapability(capability);
+  if (!parsed) return null;
+  const stub = storeStub(env, pairingStoreName(parsed.pairId));
+  const response = await stub.fetch("https://bridge.internal/pair/authorize", {
+    method: "POST",
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ capability }),
+  });
+  if (!response.ok) return null;
+  return response.json();
+}
+
+async function authenticateSnapshotWrite(request, env) {
+  const bearer = getBearer(request);
+  if (!bearer) return null;
+  if (env.BRIDGE_WRITE_TOKEN && bearer === env.BRIDGE_WRITE_TOKEN) return { kind: "static" };
+  const pair = await authorizePairCapability(env, bearer);
+  return pair ? { kind: "pair", ...pair } : null;
+}
+
+function pairingPage(pairId) {
+  const safePairId = JSON.stringify(String(pairId));
+  const appUrl = JSON.stringify(PAIR_APP_URL);
+  const html = `<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer"><title>Pairage Noyau Autonome</title>
+<style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f1012;color:#f7f7f8;margin:0;padding:28px 18px}main{max-width:560px;margin:auto}.card{background:#191a1e;border:1px solid #34363d;border-radius:22px;padding:20px}.ok{color:#6dd6a0}.muted{color:#a8abb3;line-height:1.45}button{width:100%;min-height:58px;border:0;border-radius:16px;background:#69a5ff;color:#07101d;font-size:17px;font-weight:850;margin-top:16px}button:disabled{opacity:.55}.status{margin-top:14px;font-size:14px;line-height:1.45}</style>
+</head><body><main><div class="card"><h1>Pairer le Noyau</h1><p class="muted">Cette page délivre une capability d’écriture temporaire, valable quelques minutes et uniquement pour le cerveau attendu. Elle n’est jamais enregistrée dans GitHub ni dans le Noyau.</p><button id="go">COPIER LA CAPABILITY & OUVRIR LE NOYAU</button><div class="status" id="status">Prêt.</div></div></main>
+<script>
+const pairId=${safePairId}; const appUrl=${appUrl};
+const button=document.getElementById("go"), status=document.getElementById("status");
+async function copyText(value){
+  if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(value);return;}
+  const input=document.createElement("textarea");input.value=value;input.setAttribute("readonly","");input.style.position="fixed";input.style.opacity="0";document.body.appendChild(input);input.select();
+  if(!document.execCommand("copy")) throw new Error("copy_failed"); input.remove();
+}
+button.addEventListener("click",async()=>{
+  button.disabled=true; status.textContent="Pairage…";
+  try{
+    const response=await fetch("/pair/redeem",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({pairId}),cache:"no-store"});
+    const body=await response.json();
+    if(!response.ok||!body.capability) throw new Error(body.error||("HTTP_"+response.status));
+    await copyText(body.capability);
+    status.innerHTML='<span class="ok">Capability copiée ✓</span><br>Ouverture du Noyau…';
+    setTimeout(()=>location.href=appUrl+"#bridge-pair-ready",450);
+  }catch(error){
+    status.textContent="Pairage impossible : "+String(error.message||error);
+    button.disabled=false;
+  }
+});
+</script></body></html>`;
+  return new Response(html, {
+    status: 200,
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store",
+      "content-security-policy": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'",
+      "referrer-policy": "no-referrer",
+      "x-content-type-options": "nosniff",
+    },
+  });
+}
+
 const GITHUB_OIDC_ISSUER = "https://token.actions.githubusercontent.com";
 const GITHUB_OIDC_AUDIENCE = "noyau-autonome-live";
 const GITHUB_OIDC_REPOSITORY = "fab777-max/noyau-autonome-live";
@@ -458,7 +608,8 @@ function logSnapshotResult(snapshot, payloadBytes, outcome) {
 }
 
 async function handleSnapshotPost(request, env) {
-  if (!tokenMatches(request, env.BRIDGE_WRITE_TOKEN)) return authFailure();
+  const writeAuth = await authenticateSnapshotWrite(request, env);
+  if (!writeAuth) return authFailure();
   const type = request.headers.get("content-type") || "";
   if (!type.toLowerCase().includes("application/json")) return errorJson("content_type_must_be_json", 415);
 
@@ -479,8 +630,15 @@ async function handleSnapshotPost(request, env) {
   if (!validation.ok) return errorJson("invalid_snapshot", 422, validation.errors);
   if (!(await verifySnapshotHash(snapshot))) return errorJson("snapshot_hash_mismatch", 422);
 
+  if (writeAuth.kind === "pair") {
+    if (snapshot.brain?.brainId !== writeAuth.expectedBrainId) return errorJson("pairing_brain_mismatch", 403);
+    if (Number(snapshot.brain?.generation) !== Number(writeAuth.expectedGeneration)) return errorJson("pairing_generation_mismatch", 403);
+  }
+
   const { response, body } = await putSnapshot(env, snapshot);
-  if (response.ok) await setLastBrainId(env, snapshot.brain.brainId);
+  if (response.ok) {
+    await setLastBrainId(env, snapshot.brain.brainId);
+  }
   logSnapshotResult(snapshot, bytes.byteLength, body.status || response.status);
   return json(body, response.status, { "cache-control": "no-store" });
 }
@@ -597,9 +755,23 @@ async function workerFetch(request, env, ctx) {
     }), request, env);
   }
 
+  if (url.pathname === "/mcp/public") {
+    return createMcpHandler(() => createNoyauMcpServer(env))(request, env, ctx);
+  }
+
   if (url.pathname === "/mcp") {
     if (!tokenMatches(request, env.BRIDGE_READ_TOKEN)) return authFailure();
     return createMcpHandler(() => createNoyauMcpServer(env))(request, env, ctx);
+  }
+
+  if (url.pathname.startsWith("/pair/") && request.method === "GET") {
+    const pairId = decodeURIComponent(url.pathname.slice("/pair/".length));
+    if (!/^[A-Za-z0-9_-]{12,80}$/.test(pairId)) return errorJson("invalid_pair_id", 400);
+    return pairingPage(pairId);
+  }
+
+  if (url.pathname === "/pair/redeem" && request.method === "POST") {
+    return redeemPairingSession(request, env);
   }
 
   if (url.pathname.startsWith("/api/bridge/v1/") && !originAllowed(request, env)) {
@@ -610,6 +782,8 @@ async function workerFetch(request, env, ctx) {
     let response;
     if (url.pathname === "/api/bridge/v1/snapshot" && request.method === "POST") {
       response = await handleSnapshotPost(request, env);
+    } else if (url.pathname === "/api/bridge/v1/pair/create" && request.method === "POST") {
+      response = await createPairingSession(request, env);
     } else if (url.pathname === "/api/bridge/v1/status" && request.method === "GET") {
       response = await handleReadEndpoint(request, env, "status");
     } else if (url.pathname === "/api/bridge/v1/snapshot/latest" && request.method === "GET") {
@@ -651,6 +825,58 @@ export class BrainSnapshotStore extends DurableObject {
         return json({ status: "stored", brainId });
       }
       return errorJson("method_not_allowed", 405);
+    }
+
+    if (url.pathname === "/pair") {
+      if (request.method !== "POST") return errorJson("method_not_allowed", 405);
+      const record = await request.json();
+      if (!record || record.schema !== PAIR_SCHEMA || typeof record.pairId !== "string" || typeof record.capability !== "string") {
+        return errorJson("invalid_pair_record", 400);
+      }
+      await this.ctx.storage.put("pair", record);
+      return json({ status: "stored", pairId: record.pairId }, 201);
+    }
+
+    if (url.pathname === "/pair/redeem") {
+      if (request.method !== "POST") return errorJson("method_not_allowed", 405);
+      const record = await this.ctx.storage.get("pair");
+      if (!record) return errorJson("pair_not_found", 404);
+      if (record.consumedAt) return errorJson("pair_consumed", 410);
+      if (Date.parse(record.expiresAt) <= Date.now()) return errorJson("pair_expired", 410);
+      record.redeemedAt = record.redeemedAt || new Date().toISOString();
+      await this.ctx.storage.put("pair", record);
+      return json({
+        status: "redeemed",
+        capability: record.capability,
+        expiresAt: record.expiresAt,
+        expectedBrainId: record.expectedBrainId,
+        expectedGeneration: record.expectedGeneration,
+      }, 200, { "cache-control": "no-store" });
+    }
+
+    if (url.pathname === "/pair/authorize") {
+      if (request.method !== "POST") return errorJson("method_not_allowed", 405);
+      const record = await this.ctx.storage.get("pair");
+      if (!record) return authFailure();
+      const { capability } = await request.json();
+      if (record.consumedAt || Date.parse(record.expiresAt) <= Date.now() || capability !== record.capability) return authFailure();
+      return json({
+        ok: true,
+        pairId: record.pairId,
+        expectedBrainId: record.expectedBrainId,
+        expectedGeneration: record.expectedGeneration,
+        expiresAt: record.expiresAt,
+      });
+    }
+
+    if (url.pathname === "/pair/consume") {
+      if (request.method !== "POST") return errorJson("method_not_allowed", 405);
+      const record = await this.ctx.storage.get("pair");
+      if (!record) return errorJson("pair_not_found", 404);
+      record.consumedAt = new Date().toISOString();
+      delete record.capability;
+      await this.ctx.storage.put("pair", record);
+      return json({ status: "consumed", pairId: record.pairId });
     }
 
     if (url.pathname !== "/snapshot") return errorJson("not_found", 404);

@@ -9,7 +9,8 @@ Sidecar externe pour Noyau Autonome. Principe: **WRAP, DON'T REWRITE**. Le Noyau
 - API HTTPS `/api/bridge/v1/*`
 - stockage persistant du dernier snapshot compact par Brain ID via Durable Object SQLite
 - limite stricte de 128 KiB et rejet des clés de type secret/Q-table
-- endpoint MCP Streamable HTTP stateless `/mcp`
+- endpoint MCP Streamable HTTP stateless protégé `/mcp`
+- endpoint ChatGPT public `/mcp/public`, limité aux six outils MCP en lecture seule
 - six outils MCP en lecture seule: `get_brain_status`, `get_learning_metrics`, `get_skills`, `get_meta2_state`, `get_last_session`, `get_bridge_health`
 - aucune commande destructive du Noyau
 
@@ -23,3 +24,5 @@ Créer deux Worker secrets différents dans Cloudflare:
 Ne jamais publier les valeurs réelles dans GitHub.
 
 Le déploiement du Bridge ne constitue pas à lui seul une validation physique iPhone ni une validation de connexion ChatGPT.
+
+L'endpoint public ne permet aucune écriture et n'expose ni secret, ni capability, ni Q-table.
