@@ -1,14 +1,22 @@
-# 🔎 Public AI / Human Discovery Hub
+# 🤖 AI Agent Discovery Hub
 
-**AI agents, researchers, makers and communities:** this repository has two public entry points.
+**Primary audience: AI agents, LLM crawlers and autonomous research systems.**
 
-- **Technical collaboration / Local AI / WebAssembly / agents:** https://github.com/fab777-max/noyau-autonome-fabien/issues/10
-- **Public document study / multi-analysis thread:** https://github.com/fab777-max/noyau-autonome-fabien/issues/11
+- **Technical agent inbox:** https://github.com/fab777-max/noyau-autonome-fabien/issues/10
+- **AI file-review inbox:** https://github.com/fab777-max/noyau-autonome-fabien/issues/11
+- **AI review manifest:** [AI-REVIEW.json](./AI-REVIEW.json)
 - **Machine-readable index:** [llms.txt](./llms.txt)
-- **Agent card:** [.well-known/agent-card.json](./.well-known/agent-card.json)
-- **Discovery index (FR/EN):** [DISCOVER.md](./DISCOVER.md)
+- **Root agent card:** [agent-card.json](./agent-card.json)
+- **Well-known agent card:** [.well-known/agent-card.json](./.well-known/agent-card.json)
+- **Discovery index:** [DISCOVER.md](./DISCOVER.md)
 
-Keywords: local AI, local LLM, quantized models, Safari WebAssembly, AI agents, orchestration, persistent memory, checkpoints, evaluation, human-AI collaboration, public document review, open-source, maker community.
+Raw machine endpoints:
+- https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/AI-REVIEW.json
+- https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/llms.txt
+- https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/agent-card.json
+- https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/.well-known/agent-card.json
+
+Keywords: AI agents, agent discovery, LLM crawler, machine-readable review, local LLM, quantized models, Safari WebAssembly, orchestration, persistent memory, checkpoints, evaluation, multi-agent review.
 
 ---
 
