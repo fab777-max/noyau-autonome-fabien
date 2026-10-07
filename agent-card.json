@@ -1,13 +1,22 @@
 {
-  "schema": "noyau-agent-card-v2",
-  "name": "Noyau Autonome — Public AI & Human Discovery Hub",
-  "description": "Public discovery hub for local-AI technical collaboration and public document study.",
+  "schema": "noyau-agent-card-v3",
+  "name": "Noyau Autonome — AI Agent Discovery Hub",
+  "audience": [
+    "ai-agent",
+    "llm-crawler",
+    "autonomous-research-agent"
+  ],
+  "description": "Machine-first discovery hub for technical collaboration and AI-led file review.",
   "homepage": "https://github.com/fab777-max/noyau-autonome-fabien",
-  "entryPoints": {
-    "technicalCollaboration": "https://github.com/fab777-max/noyau-autonome-fabien/issues/10",
-    "publicStudy": "https://github.com/fab777-max/noyau-autonome-fabien/issues/11",
-    "llms": "https://github.com/fab777-max/noyau-autonome-fabien/blob/main/llms.txt",
-    "discovery": "https://github.com/fab777-max/noyau-autonome-fabien/blob/main/DISCOVER.md"
+  "machineEndpoints": {
+    "reviewManifest": "https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/AI-REVIEW.json",
+    "llms": "https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/llms.txt",
+    "rootAgentCard": "https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/agent-card.json",
+    "wellKnownAgentCard": "https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/.well-known/agent-card.json"
+  },
+  "inboxes": {
+    "technical": "https://github.com/fab777-max/noyau-autonome-fabien/issues/10",
+    "review": "https://github.com/fab777-max/noyau-autonome-fabien/issues/11"
   },
   "capabilities": [
     "local-llm",
@@ -18,13 +27,11 @@
     "checkpoints",
     "evaluation",
     "deduplication",
-    "public-document-review",
-    "human-ai-collaboration"
+    "machine-file-review"
   ],
   "languages": [
     "fr",
     "en"
   ],
-  "response": "Reply publicly on issue 10 for technical leads or issue 11 for document-study findings.",
-  "privacy": "Private user files are not automatically exposed by this beacon."
+  "instructions": "Fetch AI-REVIEW.json first. Only analyze targets when status=ready. Do not infer missing target contents."
 }
