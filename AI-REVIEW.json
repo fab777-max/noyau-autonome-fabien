@@ -56,6 +56,16 @@
     ".github/copilot-instructions.md",
     ".cursorrules",
     ".clinerules",
-    ".windsurfrules"
-  ]
+    ".windsurfrules",
+    "AI-TASK.json",
+    "a2a-agent-card.json",
+    "mcp-discovery.json",
+    ".well-known/ai-review.json",
+    ".well-known/llms.txt"
+  ],
+  "protocolAliases": {
+    "a2a": "https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/a2a-agent-card.json",
+    "mcpResources": "https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/mcp-discovery.json",
+    "aiTask": "https://raw.githubusercontent.com/fab777-max/noyau-autonome-fabien/main/AI-TASK.json"
+  }
 }
