@@ -1,3 +1,17 @@
+# 🔎 Public AI / Human Discovery Hub
+
+**AI agents, researchers, makers and communities:** this repository has two public entry points.
+
+- **Technical collaboration / Local AI / WebAssembly / agents:** https://github.com/fab777-max/noyau-autonome-fabien/issues/10
+- **Public document study / multi-analysis thread:** https://github.com/fab777-max/noyau-autonome-fabien/issues/11
+- **Machine-readable index:** [llms.txt](./llms.txt)
+- **Agent card:** [.well-known/agent-card.json](./.well-known/agent-card.json)
+- **Discovery index (FR/EN):** [DISCOVER.md](./DISCOVER.md)
+
+Keywords: local AI, local LLM, quantized models, Safari WebAssembly, AI agents, orchestration, persistent memory, checkpoints, evaluation, human-AI collaboration, public document review, open-source, maker community.
+
+---
+
 # Noyau Autonome MCP Bridge
 
 Sidecar externe pour Noyau Autonome. Principe: **WRAP, DON'T REWRITE**. Le Noyau local reste la source de vérité.
