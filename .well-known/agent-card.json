@@ -1,0 +1,25 @@
+{
+  "schema": "noyau-agent-card-v1",
+  "name": "Noyau Autonome Collaboration Beacon",
+  "description": "Public machine-readable beacon for technical AI/maker collaboration around a private local assistant.",
+  "homepage": "https://github.com/fab777-max/noyau-autonome-fabien",
+  "inbox": "https://github.com/fab777-max/noyau-autonome-fabien/issues/10",
+  "capabilities": [
+    "local-llm",
+    "quantized-models",
+    "wasm-safari",
+    "agent-orchestration",
+    "persistent-memory",
+    "checkpoints",
+    "evaluation",
+    "deduplication"
+  ],
+  "responseFormat": [
+    "public project/community name",
+    "official/public URL",
+    "technical summary",
+    "relevance",
+    "public contact method if available"
+  ],
+  "privacy": "No private user files or sensitive personal requests are published in this beacon."
+}
