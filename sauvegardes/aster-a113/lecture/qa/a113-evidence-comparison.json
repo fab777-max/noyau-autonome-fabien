@@ -1,0 +1,11 @@
+{
+  "scope": "Synthetic software fixtures, not LLM answer quality",
+  "receipts": 24,
+  "selectedLimit": 6,
+  "earlyConstraintIncluded": {
+    "A112": false,
+    "A113": true
+  },
+  "duplicateReceipts": 3,
+  "distinctResults": 1
+}

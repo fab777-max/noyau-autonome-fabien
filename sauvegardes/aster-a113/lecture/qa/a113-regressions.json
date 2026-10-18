@@ -1,0 +1,112 @@
+{
+  "release": "A113",
+  "scope": "Focused regression checks. Inference, DOM and browser services simulated; no real model quality measurement.",
+  "passed": 26,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "A113 : un dossier sélectionné ne détourne aucune phrase ordinaire",
+      "passed": true
+    },
+    {
+      "name": "A113 : prénom retenu retrouvé par reformulation et identité récente prioritaire",
+      "passed": true
+    },
+    {
+      "name": "A113 : correction longue entière et question abrégée explicitement",
+      "passed": true
+    },
+    {
+      "name": "A113 : 300 changements de note restent bornés sans perdre les notes actives",
+      "passed": true
+    },
+    {
+      "name": "A113 : oubli filtre les anciens messages et accepte une nouvelle déclaration datée",
+      "passed": true
+    },
+    {
+      "name": "A113 : édition de mémoire invalide aussi les demandes archivées",
+      "passed": true
+    },
+    {
+      "name": "A113 : 1 000 messages archivés puis reprise sans suppression ni croissance libre",
+      "passed": true
+    },
+    {
+      "name": "A113 : souvenir ancien reste retrouvable dans une conversation archivée",
+      "passed": true
+    },
+    {
+      "name": "A113 : sauvegarde et restauration comprennent archives et mesure sans changer la conversation",
+      "passed": true
+    },
+    {
+      "name": "A113 : restauration de demande garde checkpoint, reçus et autorisation et échange le travail actif",
+      "passed": true
+    },
+    {
+      "name": "A113 : bouton de sélection restaure le vrai travail sans lancer le modèle",
+      "passed": true
+    },
+    {
+      "name": "A113 : sélection refuse un document modifié et laisse le checkpoint intact",
+      "passed": true
+    },
+    {
+      "name": "A113 : archiver depuis l’interface garde les notes et le travail en pause",
+      "passed": true
+    },
+    {
+      "name": "A113 : retrait d’une demande demande deux clics, sans purge automatique",
+      "passed": true
+    },
+    {
+      "name": "A113 : sélection documents sans correspondance laisse une salutation au modèle",
+      "passed": true
+    },
+    {
+      "name": "A113 : réserve couvre une réponse et un journal UTF-8 volumineux",
+      "passed": true
+    },
+    {
+      "name": "A113 : ancienne contrainte préservée après 24 résultats et doublons non comptés",
+      "passed": true
+    },
+    {
+      "name": "A113 : recherches reformulées sans nouveauté s’arrêtent après trois outils",
+      "passed": true
+    },
+    {
+      "name": "A113 : une réparation de JSON bornée puis un calcul valide",
+      "passed": true
+    },
+    {
+      "name": "A113 : deux décisions invalides arrêtent sans outil ni boucle",
+      "passed": true
+    },
+    {
+      "name": "A113 : calcul vérifié accepté seulement avec son reçu exact, fausse publication refusée",
+      "passed": true
+    },
+    {
+      "name": "A113 : comparaison alterne les modes et ne mélange pas les contextes",
+      "passed": true
+    },
+    {
+      "name": "A113 : comparaison garde les données initiales identiques et quatre outils maximum",
+      "passed": true
+    },
+    {
+      "name": "A113 : pas de gain de qualité annoncé sans notes humaines appariées",
+      "passed": true
+    },
+    {
+      "name": "A113 : comparaison UI ne démarre que sur clic, huit réponses bornées sans modifier les notes",
+      "passed": true
+    },
+    {
+      "name": "A113 : comparaison interrompue reprend le checkpoint sans dupliquer une réponse",
+      "passed": true
+    }
+  ]
+}
