@@ -1,0 +1,149 @@
+{
+  "release": "A111",
+  "date": "2026-10-18T16:39:27.689Z",
+  "scope": "Modules réels ; DOM, Worker, IndexedDB et navigateur simulés. Aucune inférence réelle ni vérification physique iPhone.",
+  "passed": 35,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "intentions usuelles : pack, documents, étapes et relais explicites",
+      "passed": true
+    },
+    {
+      "name": "questions, négations, citations et parole ordinaire restent dans la conversation",
+      "passed": true
+    },
+    {
+      "name": "brouillon récupéré exactement après fermeture, Unicode inclus",
+      "passed": true
+    },
+    {
+      "name": "conflit de brouillons entre onglets refusé sans écraser le premier",
+      "passed": true
+    },
+    {
+      "name": "brouillon corrompu ou écriture refusée : ancien stockage intact",
+      "passed": true
+    },
+    {
+      "name": "relais agent : envoi incertain ou brouillon différent conservé",
+      "passed": true
+    },
+    {
+      "name": "ouverture : aucun moteur ni téléchargement ; brouillon restauré",
+      "passed": true
+    },
+    {
+      "name": "double appui : une seule demande ; tâche interrompue et archives intactes",
+      "passed": true
+    },
+    {
+      "name": "échec transactionnel : aucun faux succès et demande toujours affichée",
+      "passed": true
+    },
+    {
+      "name": "reprise de conversation : raccourci atelier explicite et brief exact",
+      "passed": true
+    },
+    {
+      "name": "texte dans la conversation rendu comme texte, pas comme HTML",
+      "passed": true
+    },
+    {
+      "name": "raccourci documents et lien de reprise ouvrent leurs parents repliés",
+      "passed": true
+    },
+    {
+      "name": "reprise ancienne et bouton discuter protègent le texte en préparation",
+      "passed": true
+    },
+    {
+      "name": "relais agent ne transmet rien automatiquement ; conflit ne navigue pas",
+      "passed": true
+    },
+    {
+      "name": "conversation libre sans modèle : aucun téléchargement implicite",
+      "passed": true
+    },
+    {
+      "name": "réponse locale : brouillon effacé seulement après enregistrement atomique",
+      "passed": true
+    },
+    {
+      "name": "réponse locale non enregistrée : demande et brouillon récupérables",
+      "passed": true
+    },
+    {
+      "name": "préparer un projet remplit un brouillon sans créer ni lancer le projet",
+      "passed": true
+    },
+    {
+      "name": "préparation projet : brouillon existant et demande trop longue protégés",
+      "passed": true
+    },
+    {
+      "name": "sauvegarde, restauration et copie de retour contiennent conversation et brouillon",
+      "passed": true
+    },
+    {
+      "name": "boutons de sauvegarde et restauration utilisent réellement le brouillon courant",
+      "passed": true
+    },
+    {
+      "name": "1 000 messages : refus avant Worker, ancien travail et brouillon préservés",
+      "passed": true
+    },
+    {
+      "name": "guide sans modèle : même limite, transaction intacte",
+      "passed": true
+    },
+    {
+      "name": "borne en octets UTF-8 et réserve de réponse avant calcul",
+      "passed": true
+    },
+    {
+      "name": "historique ancien au-delà du plafond : lecture, export et retour conservés",
+      "passed": true
+    },
+    {
+      "name": "réponse tardive après restauration : données et demande restaurées intactes",
+      "passed": true
+    },
+    {
+      "name": "checkpoint tardif après restauration même contenu : aucune écriture ni ACK",
+      "passed": true
+    },
+    {
+      "name": "nouvelle méthode conservée ailleurs pendant le calcul : aucune perte à la réponse",
+      "passed": true
+    },
+    {
+      "name": "arrêt avant écriture : réponse non validée et demande préservée",
+      "passed": true
+    },
+    {
+      "name": "révision périmée sans BroadcastChannel : toute mutation refusée",
+      "passed": true
+    },
+    {
+      "name": "quota à la révision : aucune écriture partielle de conversation",
+      "passed": true
+    },
+    {
+      "name": "ancienne sauvegarde sans compteur : nouvelle révision, retour arrière monotone",
+      "passed": true
+    },
+    {
+      "name": "checkpoint confirmé puis réponse : une seule paire, demande terminée et révision avancée",
+      "passed": true
+    },
+    {
+      "name": "restauration avec étude, dossier photo, document et méthodes : contenus inchangés",
+      "passed": true
+    },
+    {
+      "name": "compteur maximal : restauration annulée sans effacement",
+      "passed": true
+    }
+  ]
+}

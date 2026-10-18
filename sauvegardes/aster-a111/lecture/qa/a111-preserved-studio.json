@@ -1,0 +1,277 @@
+{
+  "release": "A111",
+  "at": "2026-10-18T16:39:27.318Z",
+  "scope": "Modules et handlers réels ; IndexedDB/DOM simulés, rendu PNG réel avec canvas natif Node. Aucune validation navigateur, iPhone ou LLM.",
+  "passed": 67,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "échange court : faits, nom, titre, photo puis relecture",
+      "passed": true
+    },
+    {
+      "name": "brief complet en un message sans inventer ville, prix ou contact",
+      "passed": true
+    },
+    {
+      "name": "salutation et demande générique ne deviennent pas des faits",
+      "passed": true
+    },
+    {
+      "name": "recherche ou code non exécutés et limite expliquée",
+      "passed": true
+    },
+    {
+      "name": "corrections naturelles conservent accents, noms et casse",
+      "passed": true
+    },
+    {
+      "name": "brouillon et faits antérieurs intacts après un refus de longueur",
+      "passed": true
+    },
+    {
+      "name": "champs répétés ou ambiguïté dans un brief sont refusés sans tronquer",
+      "passed": true
+    },
+    {
+      "name": "photos ajoutées révoquent la validation et refusent le dépassement",
+      "passed": true
+    },
+    {
+      "name": "sauvegarde privée et import préservent tous les échanges et brouillons",
+      "passed": true
+    },
+    {
+      "name": "validation import refuse conversations invalides avant écriture",
+      "passed": true
+    },
+    {
+      "name": "ancien dossier incomplet : textes manquants proposés, texte personnel conservé",
+      "passed": true
+    },
+    {
+      "name": "écriture en conflit ne remplace pas une version plus récente",
+      "passed": true
+    },
+    {
+      "name": "échec transactionnel protège le dernier projet confirmé",
+      "passed": true
+    },
+    {
+      "name": "sauvegarde complète et retour arrière incluent les projets conversationnels",
+      "passed": true
+    },
+    {
+      "name": "deux PNG réels et fiche échappée exportables sans dépendance réseau",
+      "passed": true
+    },
+    {
+      "name": "Accueil par défaut : question générale traitée par le dialogue, aucun fait de présentation ajouté",
+      "passed": true
+    },
+    {
+      "name": "Accueil : préférence explicite disponible après réouverture dans le même champ",
+      "passed": true
+    },
+    {
+      "name": "Accueil : passage explicite à la présentation et question incidente sans confusion de faits",
+      "passed": true
+    },
+    {
+      "name": "Accueil : brouillon général ne crée aucun dossier et revient après réouverture",
+      "passed": true
+    },
+    {
+      "name": "Accueil : question depuis un projet préserve son brouillon ; retour à la discussion isolé",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : trois réponses et une photo produisent les aperçus puis le ZIP",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : réouverture de la discussion puis du projet retrouve le brouillon de présentation sans exécution",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : changement de projet sauvegarde le texte saisi sans attendre le délai",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : échec stockage conserve la saisie et bloque les confirmations trompeuses",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : double envoi produit une seule paire de messages",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : import défectueux parmi plusieurs photos ne sauve pas un lot partiel",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : saisie HTML reste du texte dans la conversation",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : sauvegarde réimportée sans effacer les autres travaux ni relancer le modèle",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : modifier un titre invalide immédiatement les anciens liens de livraison",
+      "passed": true
+    },
+    {
+      "name": "UI réelle : restauration dans un autre onglet bloque les écritures anciennes",
+      "passed": true
+    },
+    {
+      "name": "UI : commande naturelle explicite, double envoi sans double calcul, candidats séparés puis adoption relue",
+      "passed": true
+    },
+    {
+      "name": "UI : résultat complet retrouvé et commande répétée sans nouveau calcul ni croissance des échanges",
+      "passed": true
+    },
+    {
+      "name": "UI : interruption et réouverture gardent la première proposition et reprennent le même travail",
+      "passed": true
+    },
+    {
+      "name": "UI : modèle absent conserve la commande, les textes et le projet sans faux travail terminé",
+      "passed": true
+    },
+    {
+      "name": "UI : nouvelles informations excluent les propositions anciennes sans effacer leur preuve",
+      "passed": true
+    },
+    {
+      "name": "UI : message non envoyé empêche la rédaction de partir sur des informations périmées",
+      "passed": true
+    },
+    {
+      "name": "UI : plafond des travaux arrête sans effacer l’historique ; occupation visible",
+      "passed": true
+    },
+    {
+      "name": "UI : demande de rédaction sans photo reste une consigne visible et ne calcule rien",
+      "passed": true
+    },
+    {
+      "name": "pixels réels : éclaircir change le PNG sans toucher la photo importée",
+      "passed": true
+    },
+    {
+      "name": "pixels réels : noir et blanc, carré centré et rotation ont les dimensions attendues",
+      "passed": true
+    },
+    {
+      "name": "retouches répétées : aucun empilement de fichiers, réglages bornés, retour source exact",
+      "passed": true
+    },
+    {
+      "name": "traitement découpé : une annulation arrête les pixels et conserve la source",
+      "passed": true
+    },
+    {
+      "name": "exports : fiche et affiche reprennent la retouche ; aucun export muet de la source",
+      "passed": true
+    },
+    {
+      "name": "sauvegardes : source et réglages restaurés ensemble, consentement privé renouvelé",
+      "passed": true
+    },
+    {
+      "name": "import : réglages inconnus, débordants ou cachant des données refusés",
+      "passed": true
+    },
+    {
+      "name": "commandes : formulation courante et numéro, aucun traitement partiel de demande composée",
+      "passed": true
+    },
+    {
+      "name": "UI photo seule : retouche et PNG récupérable sans questionnaire ni modèle",
+      "passed": true
+    },
+    {
+      "name": "UI : répétition du même réglage ne grossit pas les messages ni les photos",
+      "passed": true
+    },
+    {
+      "name": "UI : photo numérotée seule modifiée, sélection préservée",
+      "passed": true
+    },
+    {
+      "name": "UI : retouche sans source et commande composée conservées sans inventer des faits",
+      "passed": true
+    },
+    {
+      "name": "UI : titre contenant photo reste une correction de titre",
+      "passed": true
+    },
+    {
+      "name": "UI : échec de sauvegarde ne confirme pas une retouche non enregistrée",
+      "passed": true
+    },
+    {
+      "name": "UI : retouche annule la livraison précédente puis produit la nouvelle fiche cohérente",
+      "passed": true
+    },
+    {
+      "name": "UI : restauration externe retire les anciens téléchargements photo et pack",
+      "passed": true
+    },
+    {
+      "name": "UI étudiant : commande dans la même conversation, pas dans les faits, réouverture sans calcul",
+      "passed": true
+    },
+    {
+      "name": "UI étudiant : le mode édition explicite garde la priorité",
+      "passed": true
+    },
+    {
+      "name": "UI étudiant : une durée invalide conserve le brouillon et ne crée pas de séance",
+      "passed": true
+    },
+    {
+      "name": "UI rédaction : méthodes relues figées dans un nouveau travail, sans remplacer les textes",
+      "passed": true
+    },
+    {
+      "name": "UI étudiant : brouillons de note et méthode retrouvés, acceptation explicite réutilisable",
+      "passed": true
+    },
+    {
+      "name": "UI étudiant : note saisie mais non soumise conservée après navigation et réouverture",
+      "passed": true
+    },
+    {
+      "name": "UI étudiant : stockage défectueux isolé sans rendre les projets inutilisables",
+      "passed": true
+    },
+    {
+      "name": "UI image : création sauvegardée sans devenir une réalisation ni lancer le modèle",
+      "passed": true
+    },
+    {
+      "name": "UI image : source photo conservée et transformation préparée à part",
+      "passed": true
+    },
+    {
+      "name": "sauvegarde image : tentative conservée, aucune relance et rejet du brouillon invalide",
+      "passed": true
+    },
+    {
+      "name": "présentation ouverte : opinions et demande de mémoire passent au vrai dialogue sans modifier les faits",
+      "passed": true
+    },
+    {
+      "name": "un sujet d’étude hors catalogue reste une conversation, pas des exercices clients mal étiquetés",
+      "passed": true
+    },
+    {
+      "name": "champ général à 4 000 caractères, retour au champ de projet préservé",
+      "passed": true
+    }
+  ]
+}

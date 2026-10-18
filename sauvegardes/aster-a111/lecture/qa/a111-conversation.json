@@ -1,0 +1,240 @@
+{
+  "release": "A111",
+  "scope": "Modules et gestionnaires réels ; IndexedDB, DOM, temps, cache et inférence simulés. Aucun test physique iPhone ni mesure réelle de qualité du modèle.",
+  "passed": 58,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "questions ordinaires et préférences ne deviennent pas des faits de présentation",
+      "passed": true
+    },
+    {
+      "name": "le temps supplémentaire dépend de la tâche ou d’un choix explicite",
+      "passed": true
+    },
+    {
+      "name": "notes explicites dédupliquées, bornées, listées et retirables sans effacer l’historique",
+      "passed": true
+    },
+    {
+      "name": "une préférence oubliée invalide le contexte et le plan de reprise",
+      "passed": true
+    },
+    {
+      "name": "notes et confirmation sont atomiques en cas de quota",
+      "passed": true
+    },
+    {
+      "name": "mémoire sans modèle, réouverture et sauvegarde complète conservent les préférences",
+      "passed": true
+    },
+    {
+      "name": "sauvegarde refuse une note malformée avant toute mutation",
+      "passed": true
+    },
+    {
+      "name": "envoi général : checkpoint puis réponse, même historique que l’espace avancé",
+      "passed": true
+    },
+    {
+      "name": "réponse basée sur préférences et derniers échanges, sans anciennes affirmations A65",
+      "passed": true
+    },
+    {
+      "name": "commande de capacités annonce explicitement les moteurs non actifs",
+      "passed": true
+    },
+    {
+      "name": "demande trop longue, conversation pleine et anciens échanges ne sont pas supprimés",
+      "passed": true
+    },
+    {
+      "name": "modèle absent : demande durable, installation explicite et aucun lancement à la réouverture",
+      "passed": true
+    },
+    {
+      "name": "une nouvelle demande conserve la précédente et refuse la 51e archive",
+      "passed": true
+    },
+    {
+      "name": "restauration pendant calcul : aucune réponse tardive ne remplace les données",
+      "passed": true
+    },
+    {
+      "name": "lecture des méthodes actuelles au commit, sans écraser une méthode ajoutée pendant le calcul",
+      "passed": true
+    },
+    {
+      "name": "documents locaux recherchés seulement après sélection explicite, passages traçables",
+      "passed": true
+    },
+    {
+      "name": "absence de passage correspondant ne fabrique pas une lecture documentaire",
+      "passed": true
+    },
+    {
+      "name": "calibrage du vrai prompt conserve la demande et signale les retraits facultatifs",
+      "passed": true
+    },
+    {
+      "name": "runner réel : protocole, modèle local, un Worker, ACK après sauvegarde et libération",
+      "passed": true
+    },
+    {
+      "name": "runner refuse ancien protocole et modèle absent sans téléchargement",
+      "passed": true
+    },
+    {
+      "name": "échec du checkpoint bloque ACK positif et résultat",
+      "passed": true
+    },
+    {
+      "name": "page cachée ou pause explicite arrêtent le Worker et libèrent la réservation",
+      "passed": true
+    },
+    {
+      "name": "pipeline approfondi réel : le plan est requis dans la réponse, jamais silencieusement évincé",
+      "passed": true
+    },
+    {
+      "name": "pipeline interrompu après plan : une reprise calcule seulement la réponse manquante",
+      "passed": true
+    },
+    {
+      "name": "pipeline refuse les fausses déclarations persistantes après au plus une correction",
+      "passed": true
+    },
+    {
+      "name": "brouillon de discussion isolé et sauvegardé sans créer de projet photo",
+      "passed": true
+    },
+    {
+      "name": "correction choisie : original conservé, relance corrigée et réemploi seulement pertinent",
+      "passed": true
+    },
+    {
+      "name": "exemples de futur entraînement : consentement explicite, dédoublonnage et plafond",
+      "passed": true
+    },
+    {
+      "name": "correction oubliée ne revient ni par l’historique ni par les exemples",
+      "passed": true
+    },
+    {
+      "name": "éditeur de correction : transaction, reprise invalidée, sauvegarde complète et rejet avant mutation",
+      "passed": true
+    },
+    {
+      "name": "restauration refuse un brouillon malformé ; quota garde le précédent",
+      "passed": true
+    },
+    {
+      "name": "question documentaire longue et relance utilisent les bons mots, sans troncature du document",
+      "passed": true
+    },
+    {
+      "name": "résumé du fichier choisi borné à deux extraits, annoncé partiel, aucun caractère Unicode cassé",
+      "passed": true
+    },
+    {
+      "name": "import depuis la conversation : exact, sélectionné, doublon rejeté et aucun appel modèle à l’import",
+      "passed": true
+    },
+    {
+      "name": "contexte compact : dernière paire prioritaire sur une source facultative trop longue",
+      "passed": true
+    },
+    {
+      "name": "source documentaire requise conservée ; trop grande déclenche une limite visible",
+      "passed": true
+    },
+    {
+      "name": "sortie progressive reste provisoire, disparaît après échec et ne devient jamais une réponse enregistrée",
+      "passed": true
+    },
+    {
+      "name": "runner : mesures et brouillon transmis depuis les événements du Worker",
+      "passed": true
+    },
+    {
+      "name": "Worker réel : contrat du troisième argument wllama et plan non diffusé comme réponse",
+      "passed": true
+    },
+    {
+      "name": "message de 4 000 caractères conservé, sauvegardé et transmis sans coupe",
+      "passed": true
+    },
+    {
+      "name": "les trois phrases de discussion de l’audit ne modifient plus un projet ouvert",
+      "passed": true
+    },
+    {
+      "name": "préférence naturelle enregistrée atomiquement, jamais seulement affirmée par le modèle",
+      "passed": true
+    },
+    {
+      "name": "douze messages récents et souvenir pertinent ancien, sans seconde histoire ni fait inventé",
+      "passed": true
+    },
+    {
+      "name": "calcul déterministe, décimales, précédence, bornes et refus de toute exécution de code",
+      "passed": true
+    },
+    {
+      "name": "outils : aucune lecture de document sans autorisation et sélection respectée",
+      "passed": true
+    },
+    {
+      "name": "lecture successive exacte et bornée, même au milieu d’un caractère Unicode",
+      "passed": true
+    },
+    {
+      "name": "circuit adaptatif : recherche réelle, calcul réel, réponse, critique, reprise sans recalcul",
+      "passed": true
+    },
+    {
+      "name": "décision malformée ou outil interdit : aucune action, réponse avec les éléments connus",
+      "passed": true
+    },
+    {
+      "name": "recherche répétée arrêtée et huit recherches au maximum, pas de boucle pour remplir le temps",
+      "passed": true
+    },
+    {
+      "name": "interruption après choix : reprise de l’outil choisi sans régénérer sa décision",
+      "passed": true
+    },
+    {
+      "name": "échec de sauvegarde avant outil : zéro lecture ou calcul lancé",
+      "passed": true
+    },
+    {
+      "name": "relecture critique séparée du contrôle de forme, correction ciblée unique",
+      "passed": true
+    },
+    {
+      "name": "UI branche l’outil aux données actuelles et conserve le journal après réponse",
+      "passed": true
+    },
+    {
+      "name": "UI refuse une lecture d’outil après restauration concurrente",
+      "passed": true
+    },
+    {
+      "name": "protocole d’outil : aller-retour Worker, résultat vérifié et job étranger refusé",
+      "passed": true
+    },
+    {
+      "name": "Worker et circuit réels : budget 768, ACK durable, outil local puis réponse relue",
+      "passed": true
+    },
+    {
+      "name": "sources affichées de la réponse conservées même si la relecture en écarte une",
+      "passed": true
+    },
+    {
+      "name": "anciens projets : empreinte de reprise inchangée et réponse conservée sans recalcul",
+      "passed": true
+    }
+  ]
+}
