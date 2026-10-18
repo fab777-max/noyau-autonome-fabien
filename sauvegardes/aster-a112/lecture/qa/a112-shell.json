@@ -1,0 +1,24 @@
+{
+  "release": "A112",
+  "scope": "Vrais fichiers ; réseau, service worker et Cache API simulés. Aucun cache utilisateur utilisé.",
+  "passed": 4,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "tous les imports locaux sont présents ; quatre pages A112 et nouveau module hors ligne",
+      "passed": true
+    },
+    {
+      "name": "copie complète puis ouverture hors ligne avec le nouveau module",
+      "passed": true
+    },
+    {
+      "name": "copie interrompue : aucun faux prêt ; modèle et ancienne copie intacts",
+      "passed": true
+    },
+    {
+      "name": "nettoyage après copie complète touche seulement les anciennes interfaces",
+      "passed": true
+    }
+  ]
+}
